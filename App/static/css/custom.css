@@ -1,0 +1,11 @@
+.alert {
+    display: none;
+}
+
+#graphContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+/* Custom css here... */
