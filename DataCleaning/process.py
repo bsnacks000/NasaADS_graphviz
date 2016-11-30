@@ -292,54 +292,6 @@ class ProcessGraph(object):
         except AttributeError as e:
             raise e('dataframes for subgraphs are not set')
 
-
-
-# prepare object in flask for sigma... takes two pandas dataframes from sql table on server
-class PrepareSigma(object):
-
-    def __init__(self, nodes, edges):
-        self.nodes = nodes
-        self.edges = edges
-
-        self.sigma_obj = None   # json object for sigma
-
-    # --- move this to other guy --- #
-    def __choose_color(self, row):
-        # arbitrary color choose for the node types
-        if row['node_type'] == 'Author':
-            return "#7795c4"
-        else:
-            return '#79a55c'
-
-    def __make_json_compatible(self):
-        # sets and returns obj dictionary with node and edge list arrays(sigma compatible)
-        self.obj['nodes'] = self.nodes.to_dict('records')
-        self.obj['edges'] = self.edges.to_dict('records')
-        return self.obj
-
-    def __node_add_extra(self):
-        # adds extra stuff to the nodes list needed for sigma
-
-        node_len = len(self.nodes)
-
-        # spreads nodes in a circle for forceAtlas2
-        x = 100 * np.cos(2 * np.random.randint(0,node_len,node_len) * np.pi/node_len)
-        y = 100 * np.sin(2 * np.random.randint(0,node_len,node_len) * np.pi/node_len)
-
-        # stuff for sigma nodes
-        self.nodes['x'] = x
-        self.nodes['y'] = y
-        self.nodes['color'] = self.nodes.apply (lambda row: self.__choose_color(row), axis=1)
-
-    def __calculate_node_size(self):
-        size = np.random.random(len(self.nodes))
-        self.nodes['size'] = size
-
-    def __edge_weights(self):
-        # if edges have weight attribute change column name to size
-        pass
-
-
 if __name__ == '__main__':
     # need to test class here...
     pass
