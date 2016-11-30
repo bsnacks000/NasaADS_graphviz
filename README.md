@@ -10,7 +10,5 @@ This repo contains files to allow you to locally run a simplified instance of an
 4. pip install -r requirements.txt to load dependencies
 5. python app.py in the top directory will boot the server to localhost:5000
 
-If you encounter pro
-
-* For help with virtual environments: http://docs.python-guide.org/en/latest/dev/virtualenvs/
-* This proceedure works without error when using Python 2.7.9
+\* For help with virtual environments: http://docs.python-guide.org/en/latest/dev/virtualenvs/   
+\* This proceedure works without error when using Python 2.7.9    
