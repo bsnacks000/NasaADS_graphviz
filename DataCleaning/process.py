@@ -259,7 +259,7 @@ class ProcessGraph(object):
 
     def export_main_to_csv(self):
 
-        output_dir = os.getcwd() + '/csvs'  # make output sub-directory for csvs
+        output_dir = os.getcwd() + '/data'  # make output sub-directory for csvs
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
@@ -275,7 +275,7 @@ class ProcessGraph(object):
     def export_subgraphs_to_csv(self):
         # same as above but exports subgraphs
 
-        output_dir = os.getcwd() + '/csvs'  # make output sub-directory for csvs
+        output_dir = os.getcwd() + '/data'  # make output sub-directory for csvs
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
