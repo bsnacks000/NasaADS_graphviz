@@ -1,7 +1,12 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
+from utils.prepare_sigma import PrepareSigma
 
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] = ',\xe0\xdc`\xd60\x91}IL\x0e\xa8\x84\xdd\\\x03\xa6\xe8\x07Z\xf7\x04?\xa1'
+app.config['DATABASE'] = 'sqlite:///./data/graph.db'
 # some kind of cacheing system for JSON objects here?
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -11,26 +16,19 @@ def index():
 
 @app.route('/make_graph', methods=['POST'])
 def make_graph():
+    db_path = app.config['DATABASE']
     # AJAX request form query
-    query = request.form['query']
+    #query = request.form['query']
+
+    graph_name = 'stars_main'   #<--- need to write assemble from the forms
 
     # <---process query here... hit sqlite for tables-->
+    if graph_name not in session:
+        graph = PrepareSigma(graph_name, db_path)
+        session[graph_name] = graph.sigma_obj
     # <---make tables sigma ready and return json--->
 
-    # ..placeholder code.. for json object
-    new_graph = {
-        'nodes': [
-            {'id':1,'label':'Node A','x':0,'y':0,'color':'#4286f4','size':10},
-            {'id':2,'label':'Node B','x':3,'y':1,'color':'#55d67c','size':5},
-            {'id':3,'label':'Node C','x':1,'y':3,'color':'#c43e88','size':3}
-        ], 'edges':[
-            {'id':1,'source':1, 'target':2},
-            {'id':2,'source':2, 'target':3},
-            {'id':3,'source':1, 'target':3}
-        ]
-    }
-
-    return jsonify(new_graph)
+    return jsonify(session[graph_name])
 
 if __name__ == '__main__':
     app.run(debug=True)

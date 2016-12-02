@@ -10,6 +10,7 @@ $(document).ready(function(){
             url : '/make_graph',
         })
         .done(function(graph_data){
+
             $( "#graphContainer" ).empty(); // clear container of previous graph
             make_graph(graph_data)
         });
@@ -32,14 +33,16 @@ function make_graph(graph_data){
             settings: {
               drawEdges: true,
               drawLabels: false,
-              edgeColor: "default"
+              defaultEdgeColor: '#d3d3d3',
+              edgeColor: 'default'
             }
         });
 
+
     s.startForceAtlas2({
-        worker: true,
-        adjustSizes: false,
-        barnesHutOptimize: false,
+        linLogMode: false,
+        outboundAttractionDistribution: true,
+        //barnesHutOptimize: true,
         gravity:2
     });
 
