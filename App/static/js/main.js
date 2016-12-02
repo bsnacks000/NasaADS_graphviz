@@ -43,7 +43,9 @@ function make_graph(graph_data){
         linLogMode: false,
         outboundAttractionDistribution: true,
         //barnesHutOptimize: true,
-        gravity:2
+        startingIterations: 10, // maybe figure out how to scale these for size of graph
+        iterationsPerRender: 10,
+        gravity:2.75
     });
 
 }
