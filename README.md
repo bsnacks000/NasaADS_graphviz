@@ -5,7 +5,7 @@ This repo contains files to allow you to locally run a simplified instance of an
    
 ####To run the app:
 1. clone this repo
-2. create a virtual env in that directory* (super important!)
+2. create a [virtual env](http://docs.python-guide.org/en/latest/dev/virtualenvs/) in that directory* (super important!)
 3. activate the venv 
 4. pip install -r requirements.txt to load dependencies
 5. python app.py in the top directory will boot the server to localhost:5000
