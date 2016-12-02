@@ -18,17 +18,23 @@ def index():
 def make_graph():
     db_path = app.config['DATABASE']
     # AJAX request form query
-    #query = request.form['query']
 
-    graph_name = 'stars_main'   #<--- need to write assemble from the forms
+    query = request.form['query']
+    gtype = request.form['gtype']
+
+    graph_name = query + '_' + gtype   #<--- need to write assemble from the forms
 
     # <---process query here... hit sqlite for tables-->
-    if graph_name not in session:
-        graph = PrepareSigma(graph_name, db_path)
-        session[graph_name] = graph.sigma_obj
-    # <---make tables sigma ready and return json--->
+    try:
+        if graph_name not in session:
+            graph = PrepareSigma(graph_name, db_path)
+            session[graph_name] = graph.sigma_obj
+        # <---make tables sigma ready and return json--->
 
-    return jsonify(session[graph_name])
+        return jsonify(session[graph_name])
+
+    except ValueError as e:
+        return jsonify({'error': 'Value Error on server'})
 
 if __name__ == '__main__':
     app.run(debug=True)

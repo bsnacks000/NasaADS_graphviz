@@ -48,7 +48,7 @@ class PrepareSigma(object):
         self.nodes['x'] = x
         self.nodes['y'] = y
         self.nodes['color'] = self.nodes.apply (lambda row: self.__choose_color(row), axis=1)
-        self.nodes['size'] = 1 + 15 * self.nodes['zdeg_central']  # set to degree central
+        self.nodes['size'] = 0.25 + 15 * self.nodes['zdeg_central']  # set to degree central
 
 
     def __choose_color(self, row):

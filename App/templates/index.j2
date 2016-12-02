@@ -10,16 +10,21 @@
 </head>
 <body>
     <header>
-        <h1> NASA ADS: Testing Sigma</h1>
+        <h1> NASA ADS: Demo Version</h1>
         <p>
-            Boiler plate for the NASA ADS graph vizualization tool... 
+            Select graph type and subject and hit submit...
         </p>
         <div class="container">
             <!-- Bootstrap 2- field form  -->
             <form class="form-inline">
+                <select class="custom-select" id="gtypeSelect">
+                    <option selected>Select a Graph Type </option>
+                    <option value="islands">Island Subgraph</option>
+                    <option value="main">Main Graph</option>
+                </select>
                 <select class="custom-select" id="querySelect">
                     <option selected>Select a Subject </option>
-                    <option value="stars">stars</option>
+                    <option value="stars">Stars (Demo)</option>
                 </select>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit Query</button>

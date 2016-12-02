@@ -5,14 +5,16 @@ $(document).ready(function(){
         $.ajax({
             data : {
                 query : $("#querySelect").val(),
+                gtype : $("#gtypeSelect").val()
             },
             type : 'POST',
             url : '/make_graph',
-        })
-        .done(function(graph_data){
-
-            $( "#graphContainer" ).empty(); // clear container of previous graph
-            make_graph(graph_data)
+            success: function(graph_data){
+                if (!graph_data.error){
+                    $( "#graphContainer" ).empty(); // clear container of previous graph
+                    make_graph(graph_data)
+                }
+            }
         });
 
         // need to prevent default event behavior
@@ -43,9 +45,10 @@ function make_graph(graph_data){
         linLogMode: false,
         outboundAttractionDistribution: true,
         //barnesHutOptimize: true,
-        startingIterations: 10, // maybe figure out how to scale these for size of graph
-        iterationsPerRender: 10,
-        gravity:2.75
+        startingIterations: 12, // maybe figure out how to scale these for size of graph
+        iterationsPerRender: 12,
+        gravity:2.25,
+        //edgeWeightInfluence: 0.1 //maybe mess with this value for subgraphs
     });
 
 }
