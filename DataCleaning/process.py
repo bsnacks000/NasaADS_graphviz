@@ -114,6 +114,9 @@ class ProcessGraph(object):
         self.__lg_cc_subgraph = None    # copies of cc subgraph
         self.__islands_graph = None   # copies of islands_graph
 
+        self.a_sg_island = None
+        self.j_sg_island = None
+
         self.__init_nxgraph()
         self.__init_subgraphs()
 
@@ -159,7 +162,7 @@ class ProcessGraph(object):
 
         # merge subgraphs and islands into 2 seperate graphs
         self.__lg_cc_subgraph = self.__merge_graph(a_proj_sg_largest, j_proj_sg_largest)
-        self.__islands_graph = self.__merge_graph(a_proj_sg_largest, j_proj_sg_largest)
+        self.__islands_graph = self.__merge_graph(a_sg_island, j_sg_island)
 
         # <---- add centrality measures here as node attributes --->
         self.add_degree_centrality(self.__lg_cc_subgraph)
@@ -177,10 +180,22 @@ class ProcessGraph(object):
     def __trim(self, g, weight=1):
         # island method - trim weighted subgraphs on weight
         g_temp = nx.Graph()
+
         edge_bunch2 = [i for i in g.edges(data=True) if i[2]['weight'] > weight]
         g_temp.add_edges_from(edge_bunch2)
-        return g_temp
 
+        new_nodes = []                # add new nodes with attributes
+        for n in g.nodes(data=True):
+            if n[0] in g_temp.nodes():
+                new_nodes.append(n)
+
+        g_temp.add_nodes_from(new_nodes)
+
+        # if len(g_temp.nodes()) > 0:        # try to catch empty graphs
+        #     return g_temp
+        # else:
+        #     return g
+        return g_temp
 
     def __merge_graph(self, g, h):
         # merges graphs for export (islands and largest_cc)

@@ -61,5 +61,4 @@ class PrepareSigma(object):
     def __edge_weights(self):
         # if edges have weight attribute change column name to size
         if 'weight' in self.edges.columns:
-            self.edges = self.edges.rename(columns={'weight': 'size'})
-            return self.edges
+            self.edges['size'] = self.edges['weight']
