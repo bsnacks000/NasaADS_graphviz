@@ -35,8 +35,8 @@ function make_graph(graph_data){
             settings: {
               drawEdges: true,
               drawLabels: false,
-              defaultEdgeColor: '#d3d3d3',
-              edgeColor: 'default'
+              //defaultEdgeColor: '#d3d3d3',
+              //edgeColor: 'default'
             }
         });
 

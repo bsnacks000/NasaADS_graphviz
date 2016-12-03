@@ -61,4 +61,22 @@ class PrepareSigma(object):
     def __edge_weights(self):
         # if edges have weight attribute change column name to size
         if 'weight' in self.edges.columns:
-            self.edges['size'] = self.edges['weight']
+            self.edges['size'] = self.edges['weight'] * 2
+            # color code edges
+            self.edges['color'] = self.edges.apply(lambda row: self.__choose_edge_color(row), axis=1)
+        else:
+            self.edges['color'] = '#d3d3d3' # grey if not weighted
+
+
+    def __choose_edge_color(self, row):
+        # bins the color weight and returns a darker hex value as it increases
+        if row['weight'] == 1:
+            return '#f2efef'
+        if row['weight'] >= 2 and row['weight'] < 7:
+            return '#f2cbcb'
+        if row['weight'] >= 4 and row['weight'] < 6:
+            return '#c68b8b'
+        if row['weight'] >= 6 and row['weight'] < 10:
+            return '#914545'
+        if row['weight'] >= 10:
+            return '#330909'
