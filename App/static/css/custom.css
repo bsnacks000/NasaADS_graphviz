@@ -8,4 +8,9 @@
     height: 100%;
     margin: auto;
 }
+
+#controlContainer {
+    visibility: hidden;
+}
+
 /* Custom css here... */

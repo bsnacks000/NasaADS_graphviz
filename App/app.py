@@ -11,7 +11,7 @@ app.config['DATABASE'] = 'sqlite:///./data/graph.db'
 @app.route('/', methods=['GET'])
 def index():
     # render main page
-    return render_template('/index.j2')
+    return render_template('/index.html.j2')
 
 
 @app.route('/make_graph', methods=['POST'])

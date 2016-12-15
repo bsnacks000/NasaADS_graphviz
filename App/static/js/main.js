@@ -1,6 +1,17 @@
+
+var forceAtlasConfig = {
+    linLogMode: false,
+    outboundAttractionDistribution: true,
+    //barnesHutOptimize: true,
+    startingIterations: 12, // maybe figure out how to scale these for size of graph
+    iterationsPerRender: 12,
+    gravity:2.25
+    //edgeWeightInfluence: 0.1 //maybe mess with this value for subgraphs
+}
+
 $(document).ready(function(){
 
-    $("form").on("submit", function(event){
+    $(".form-inline").on("submit", function(event){
 
         $.ajax({
             data : {
@@ -11,13 +22,26 @@ $(document).ready(function(){
             url : '/make_graph',
             success: function(graph_data){
                 if (!graph_data.error){
-                    $( "#graphContainer" ).empty(); // clear container of previous graph
-                    make_graph(graph_data)
+                    $("#graphContainer").empty(); // clear container of previous graph
+                    $("#controlContainer").css('visibility','visible')
+
+                    var s = make_graph(graph_data);
+                    s.startForceAtlas2(forceAtlasConfig);
+
+                    $("#pauseForceAtlas").on('click', function(event){
+                        if (s.isForceAtlas2Running())
+                            s.stopForceAtlas2();
+                        else
+                            s.startForceAtlas2();
+                    });
+
+
+                    // add graph event listeners here
+
                 }
             }
         });
 
-        // need to prevent default event behavior
         event.preventDefault();
     });
 });
@@ -40,17 +64,8 @@ function make_graph(graph_data){
             }
         });
 
-
-    s.startForceAtlas2({
-        linLogMode: false,
-        outboundAttractionDistribution: true,
-        //barnesHutOptimize: true,
-        startingIterations: 12, // maybe figure out how to scale these for size of graph
-        iterationsPerRender: 12,
-        gravity:2.25,
-        //edgeWeightInfluence: 0.1 //maybe mess with this value for subgraphs
-    });
-
+    //s.startForceAtlas2(config);
+    return s;
 }
 
 

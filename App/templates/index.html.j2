@@ -7,6 +7,15 @@
     <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="static/css/custom.css" rel="stylesheet">
 
+    <!-- jquery bootstrap  sigma + plugins-->
+    <script src="static/js/jquery-3.1.0.min.js"type="text/javascript"> </script>
+    <script src="static/js/bootstrap.min.js" type="text/javascript"></script>
+    <!--  sigma + plugins -->
+    <script src="static/js/sigma.min.js" type="text/javascript"></script>
+    <script src="static/js/sigma.layout.forceAtlas2.min.js" type="text/javascript"></script>
+    <!-- <script src="static/js/sigma.plugins.animate.min.js" type="text/javascript"></script> -->
+    <!-- <script src="static/js/sigma.layout.noverlap.min.js" type="text/javascript"></script> -->
+
 </head>
 <body>
     <header>
@@ -19,8 +28,9 @@
             <form class="form-inline">
                 <select class="custom-select" id="gtypeSelect">
                     <option selected>Select a Graph Type </option>
-                    <option value="islands">Island Subgraph</option>
-                    <option value="lg_cc">Weighted Projections</option>
+                    <option value="islands">Island Subgraph (Author and Journal) </option>
+                    <option value="j_lg_cc">Largest Connected Component Subgraph (Journal)</option>
+                    <option value="a_lg_cc">Largest Connected Component Subgraph (Author)</option>
                     <option value="main">Main Graph</option>
                 </select>
                 <select class="custom-select" id="querySelect">
@@ -33,22 +43,15 @@
             </form>
         </div>
     </header>
-
-    <!-- Success Fail alert divs -->
-    <!-- <div id="successAlert" class="alert alert-success" role="alert"></div>
-    <div id="errorAlert" class="alert alert-danger" role="alert"></div> -->
+    
+    <div class='container' id='controlContainer'>
+        <button type="button" id="pauseForceAtlas"> Pause Gravity </button>
+    </div>
 
     <div id="graphContainer" ></div>
 
 
-    <!-- jquery bootstrap  sigma + plugins-->
-    <script src="static/js/jquery-3.1.0.min.js"type="text/javascript"> </script>
-    <script src="static/js/bootstrap.min.js" type="text/javascript"></script>
-    <!--  sigma + plugins -->
-    <script src="static/js/sigma.min.js" type="text/javascript"></script>
-    <script src="static/js/sigma.layout.forceAtlas2.min.js" type="text/javascript"></script>
-    <!-- <script src="static/js/sigma.plugins.animate.min.js" type="text/javascript"></script> -->
-    <!-- <script src="static/js/sigma.layout.noverlap.min.js" type="text/javascript"></script> -->
+
 
     <script src="static/js/main.js"></script>
 
