@@ -3,11 +3,9 @@
 var forceAtlasConfig = {
     linLogMode: false,
     outboundAttractionDistribution: true,
-    //barnesHutOptimize: true,
     startingIterations: 12, // maybe figure out how to scale these for size of graph
-    iterationsPerRender: 12,
-    gravity:2.25
-    //edgeWeightInfluence: 0.1 //maybe mess with this value for subgraphs
+    iterationsPerRender: 20,
+    gravity:1.5
 }
 
 // from the sigmajs documentation...
@@ -72,16 +70,14 @@ $(document).ready(function(){
         var s = new sigma({
                 graph: graph_data,
                 container: 'graphContainer',
-                renderer: {
+                renderers: [{
                     container: document.getElementById('graphContainer'),
                     type: 'canvas'
-                },
+                }],
                 settings: {
                   drawEdges: true,
                   drawLabels: false,
                   doubleClickEnabled: false
-                  //defaultEdgeColor: '#d3d3d3',
-                  //edgeColor: 'default'
                 }
             });
 
@@ -160,20 +156,3 @@ $(document).ready(function(){
         return s; // return the sigma instance to outer scope..
     }
 });
-
-
-/*
-linLogMode: boolean false
-outboundAttractionDistribution boolean false
-adjustSizes boolean false
-edgeWeightInfluence number 0
-scalingRatio number 1
-strongGravityMode boolean false
-gravity number 1
-barnesHutOptimize boolean true: should we use the algorithm's Barnes-Hut to improve repulsion's scalability (O(n²) to O(nlog(n)))? This is useful for large graph but harmful to small ones.
-barnesHutTheta number 0.5
-slowDown number 1
-startingIterations integer 1: number of iterations to be run before the first render.
-iterationsPerRender integer 1: number of iterations to be run before each render.
-
-*/

@@ -71,12 +71,8 @@ class PrepareSigma(object):
     def __choose_edge_color(self, row):
         # bins the color weight and returns a darker hex value as it increases
         if row['weight'] == 1:
-            return '#f2efef'
-        if row['weight'] >= 2 and row['weight'] < 7:
-            return '#f2cbcb'
-        if row['weight'] >= 4 and row['weight'] < 6:
-            return '#c68b8b'
-        if row['weight'] >= 6 and row['weight'] < 10:
-            return '#914545'
-        if row['weight'] >= 10:
-            return '#330909'
+            return 'rgba(211, 211, 211, 0.1)'
+        if row['weight'] >= 2 and row['weight'] < 5:
+            return 'rgba(214, 50, 50, 0.7)'
+        if row['weight'] >= 5:
+            return 'rgba(112, 0, 0, 0.95)'
