@@ -1,3 +1,4 @@
+// main js page for sigma and ajax
 
 var forceAtlasConfig = {
     linLogMode: false,
@@ -9,9 +10,26 @@ var forceAtlasConfig = {
     //edgeWeightInfluence: 0.1 //maybe mess with this value for subgraphs
 }
 
+// from the sigmajs documentation...
+// adds neighbors method to sigma factory class -> populates allNeighborsIndex
+sigma.classes.graph.addMethod('neighbors', function(nodeId) {
+    var k;
+    var neighbors = {};
+    var index = this.allNeighborsIndex[nodeId] || {};
+
+    for (k in index)
+        neighbors[k] = this.nodesIndex[k];
+
+    return neighbors;
+});
+
+// jquery page load and ajax request handler
+// contains the make_graph sigma function
+
 $(document).ready(function(){
 
     $(".form-inline").on("submit", function(event){
+        event.preventDefault();
 
         $.ajax({
             data : {
@@ -21,12 +39,15 @@ $(document).ready(function(){
             type : 'POST',
             url : '/make_graph',
             success: function(graph_data){
+
                 if (!graph_data.error){
-                    $("#graphContainer").empty(); // clear container of previous graph
+
+                    $("#graphContainer").empty()
                     $("#controlContainer").css('visibility','visible')
 
                     var s = make_graph(graph_data);
                     s.startForceAtlas2(forceAtlasConfig);
+
 
                     $("#pauseForceAtlas").on('click', function(event){
                         if (s.isForceAtlas2Running())
@@ -34,100 +55,111 @@ $(document).ready(function(){
                         else
                             s.startForceAtlas2();
                     });
+
+                    // remove a row from the table - remove header if empty
+                    $("#htmlTable").on('click','.rm-btn', function(event){
+                        $(this).closest('tr').remove();
+                        if ($('#htmlTable > tbody').is(':empty'))
+                            $('#htmlTableWrapper').css('visibility','hidden');
+                    });
+                } // can add an else error message here
+            }
+        });
+    });
+
+    function make_graph(graph_data){
+
+        var s = new sigma({
+                graph: graph_data,
+                container: 'graphContainer',
+                renderer: {
+                    container: document.getElementById('graphContainer'),
+                    type: 'canvas'
+                },
+                settings: {
+                  drawEdges: true,
+                  drawLabels: false,
+                  doubleClickEnabled: false
+                  //defaultEdgeColor: '#d3d3d3',
+                  //edgeColor: 'default'
                 }
-            }
+            });
+
+        // binding events for neighbors - save original color
+        s.graph.nodes().forEach(function(n) {
+            n.originalColor = n.color;
         });
 
-        event.preventDefault();
-    });
+        s.graph.edges().forEach(function(e) {
+            e.originalColor = e.color;
+        });
+
+
+        s.bind('clickNode', function(e) {
+            var nodeId = e.data.node.id;
+            var toKeep = s.graph.neighbors(nodeId);
+
+            toKeep[nodeId] = e.data.node;
+
+            s.graph.nodes().forEach(function(n) {
+              if (toKeep[n.id])
+                n.color = n.originalColor;
+              else
+                n.color = '#eee';
+            });
+
+            s.graph.edges().forEach(function(e) {
+              if (toKeep[e.source] && toKeep[e.target])
+                e.color = e.originalColor;
+              else
+                e.color = '#eee';
+            });
+
+            // Since the data has been modified, we need to
+            // call the refresh method to make the colors
+            // update effective.
+            s.refresh();
+        });
+
+        s.bind('clickStage', function(e) {
+            s.graph.nodes().forEach(function(n) {
+              n.color = n.originalColor;
+            });
+
+            s.graph.edges().forEach(function(e) {
+              e.color = e.originalColor;
+            });
+
+            // Same as in the previous event:
+            s.refresh();
+        });
+
+        // binding for html table
+        s.bind('doubleClickNode', function(e){
+            var data = {
+                //id: "<td>"+e.data.node.id+<"/td">,
+                label: "<td>"+ e.data.node.label + "</td>",
+                ntype: "<td>"+e.data.node.node_type + "</td>",
+                betw: "<td>"+e.data.node.zbetween_central+ "</td>",
+                deg: "<td>"+e.data.node.zdeg_central+ "</td>",
+                pager:"<td>"+ e.data.node.zpagerank+ "</td>"
+            };
+
+            var removeButton = "<td><button type=button class='rm-btn'>remove</button><td>" ;
+
+            // makes visible if hidden
+            if ($('#htmlTable > tbody').is(':empty'))
+                $('#htmlTableWrapper').css('visibility','visible');
+
+            // append the node row
+            $('#htmlTable > tbody').append(
+                "<tr>"+data.label+data.ntype+data.betw+data.deg+data.pager+removeButton+"</tr>"
+            );
+        });
+
+        return s; // return the sigma instance to outer scope..
+    }
 });
-
-// from the sigmajs documentation...
-// adds neighbors method to sigma factory class -> populates allNeighborsIndex
-sigma.classes.graph.addMethod('neighbors', function(nodeId) {
-   var k;
-   var neighbors = {};
-   var index = this.allNeighborsIndex[nodeId] || {};
-
-   for (k in index)
-     neighbors[k] = this.nodesIndex[k];
-
-   return neighbors;
- });
-
-
-
-//generate graph with sigma
-// added onClick functionality for nearest neighbors
-function make_graph(graph_data){
-
-    var s = new sigma({
-            graph: graph_data,
-            container: 'graphContainer',
-            renderer: {
-                container: document.getElementById('graphContainer'),
-                type: 'canvas'
-            },
-            settings: {
-              drawEdges: true,
-              drawLabels: false,
-              //defaultEdgeColor: '#d3d3d3',
-              //edgeColor: 'default'
-            }
-        });
-
-    // binding events for neighbors
-    s.graph.nodes().forEach(function(n) {
-        n.originalColor = n.color;
-    });
-
-    s.graph.edges().forEach(function(e) {
-        e.originalColor = e.color;
-    });
-
-
-    s.bind('clickNode', function(e) {
-        var nodeId = e.data.node.id;
-        var toKeep = s.graph.neighbors(nodeId);
-
-        toKeep[nodeId] = e.data.node;
-
-        s.graph.nodes().forEach(function(n) {
-          if (toKeep[n.id])
-            n.color = n.originalColor;
-          else
-            n.color = '#eee';
-        });
-
-        s.graph.edges().forEach(function(e) {
-          if (toKeep[e.source] && toKeep[e.target])
-            e.color = e.originalColor;
-          else
-            e.color = '#eee';
-        });
-
-        // Since the data has been modified, we need to
-        // call the refresh method to make the colors
-        // update effective.
-        s.refresh();
-    });
-
-    s.bind('clickStage', function(e) {
-        s.graph.nodes().forEach(function(n) {
-          n.color = n.originalColor;
-        });
-
-        s.graph.edges().forEach(function(e) {
-          e.color = e.originalColor;
-        });
-
-        // Same as in the previous event:
-        s.refresh();
-    });
-
-    //s.startForceAtlas2(config);
-    return s;
-}
 
 
 /*

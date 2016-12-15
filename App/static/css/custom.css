@@ -2,9 +2,27 @@
     display: none;
 }
 
+.rm-btn {
+    font-size: 20px;
+
+}
+
+.rm-btn {
+    -webkit-border-radius: 8;
+    -moz-border-radius: 8;
+    border-radius: 8px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 14px;
+    background: #a7b8c4;
+    padding: 0px 4px 0px 3px;
+    text-decoration: none;
+}
+
+
 #graphContainer {
     position: absolute;
-    width: 100%;
+    width: 90%;    /* need to leave some space for the remove buttons*/
     height: 100%;
     margin: auto;
 }
@@ -12,5 +30,13 @@
 #controlContainer {
     visibility: hidden;
 }
+
+#htmlTableWrapper {
+    width: 52%;
+    margin-left: 48%;
+    background-color: transparent;
+    visibility: hidden;
+}
+
 
 /* Custom css here... */

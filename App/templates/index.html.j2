@@ -38,21 +38,41 @@
                     <option value="stars">Stars (Demo)</option>
                 </select>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Engage!</button>
+                    <button type="submit" class="btn btn-primary">Make it So!</button>
                 </div>
             </form>
         </div>
     </header>
-    
+
     <div class='container' id='controlContainer'>
         <button type="button" id="pauseForceAtlas"> Pause Gravity </button>
     </div>
 
-    <div id="graphContainer" ></div>
+    <div class="row">
+        <div class="span8">
+            <div id="graphContainer" ></div>
+        </div>
+        <div class="span4">
+            <div class='container' id='htmlTableWrapper'>
+                <table class='table' id='htmlTable'>
+                    <thead>
+                        <tr>
+                          <th>Label</th>
+                          <th>Type</th>
+                          <th>Betweeness</th>
+                          <th>Degree</th>
+                          <th>PageRank</th>
+                          <th>Remove?</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>    <!-- jquery fills in rows for node table -->
+                </table>
+            </div>
+        </div>
+    </div>
 
 
-
-
+    <!-- main.js script -->
     <script src="static/js/main.js"></script>
 
 </body>
