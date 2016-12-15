@@ -104,23 +104,36 @@ class ProcessGraph(object):
         self.__main_edges = None
 
         # initialize subgraph variables
-        self.__lg_cc_nodes = None
-        self.__lg_cc_edges = None
+        # self.__lg_cc_nodes = None
+        # self.__lg_cc_edges = None
 
+        # author largest connected components
+        self.__a_lg_cc_nodes = None
+        self.__a_lg_cc_edges = None
+        # journal largest connected components
+        self.__j_lg_cc_nodes = None
+        self.__j_lg_cc_edges = None
+        # author and journal combined island method
         self.__islands_nodes = None
         self.__islands_edges = None
 
+        # networkx graph variables
+
         self.__g = None   # main networkx graph set in __make_graphs
-        self.__lg_cc_subgraph = None    # copies of cc subgraph
+        #self.__lg_cc_subgraph = None    # copies of cc subgraph
+
+        self.__a_lg_cc_subgraph = None   # these are now two subgraphs
+        self.__j_lg_cc_subgraph = None
+
         self.__islands_graph = None   # copies of islands_graph
 
         self.a_sg_island = None
         self.j_sg_island = None
 
+        # initialize main graph and subgraphs
         self.__init_nxgraph()
         self.__init_subgraphs()
 
-        # add centrality here
 
     def __init_nxgraph(self):
         # get node attributes and attach to graph
@@ -154,27 +167,34 @@ class ProcessGraph(object):
 
         Author, Journal = bi.sets(sg_largest)
 
-        j_proj_sg_largest = bi.weighted_projected_graph(sg_largest, Journal)
-        a_proj_sg_largest = bi.weighted_projected_graph(sg_largest, Author)
+        # largest connected component subgraphs
+        self.__j_lg_cc_subgraph = bi.weighted_projected_graph(sg_largest, Journal)
+        self.__a_lg_cc_subgraph = bi.weighted_projected_graph(sg_largest, Author)
 
-        a_sg_island =  self.__trim(a_proj_sg_largest)
-        j_sg_island = self.__trim(j_proj_sg_largest)
-
-        # merge subgraphs and islands into 2 seperate graphs
-        self.__lg_cc_subgraph = self.__merge_graph(a_proj_sg_largest, j_proj_sg_largest)
+        # trim and merge connected components to form islands sub graph
+        a_sg_island =  self.__trim(self.__j_lg_cc_subgraph)
+        j_sg_island = self.__trim(self.__a_lg_cc_subgraph)
         self.__islands_graph = self.__merge_graph(a_sg_island, j_sg_island)
 
         # <---- add centrality measures here as node attributes --->
-        self.add_degree_centrality(self.__lg_cc_subgraph)
-        self.add_pagerank(self.__lg_cc_subgraph)
-        self.add_betweenness_centrality(self.__lg_cc_subgraph)
+        #author weighted proj
+        self.add_degree_centrality(self.__a_lg_cc_subgraph)            ## need to double for each...
+        self.add_pagerank(self.__a_lg_cc_subgraph)
+        self.add_betweenness_centrality(self.__a_lg_cc_subgraph)
 
+        #journal weighted proj
+        self.add_degree_centrality(self.__j_lg_cc_subgraph)            ## need to double for each...
+        self.add_pagerank(self.__j_lg_cc_subgraph)
+        self.add_betweenness_centrality(self.__j_lg_cc_subgraph)
+
+        #islands
         self.add_degree_centrality(self.__islands_graph)
         self.add_pagerank(self.__islands_graph)
         self.add_betweenness_centrality(self.__islands_graph)
 
         # convert these to pandas dfs
-        self.__lg_cc_nodes, self.__lg_cc_edges = self.__to_pandas_df(self.__lg_cc_subgraph)
+        self.__a_lg_cc_nodes, self.__a_lg_cc_edges = self.__to_pandas_df(self.__a_lg_cc_subgraph)
+        self.__j_lg_cc_nodes, self.__j_lg_cc_edges = self.__to_pandas_df(self.__j_lg_cc_subgraph)
         self.__islands_nodes, self.__islands_edges = self.__to_pandas_df(self.__islands_graph)
 
     def __trim(self, g, weight=1):
@@ -191,11 +211,11 @@ class ProcessGraph(object):
 
         g_temp.add_nodes_from(new_nodes)
 
-        # if len(g_temp.nodes()) > 0:        # try to catch empty graphs
-        #     return g_temp
-        # else:
-        #     return g
-        return g_temp
+        if len(g_temp.nodes()) > 0:        # try to catch empty graphs
+            return g_temp
+        else:
+            return g
+        # return g_temp
 
     def __merge_graph(self, g, h):
         # merges graphs for export (islands and largest_cc)
@@ -244,12 +264,20 @@ class ProcessGraph(object):
         return self.__main_edges
 
     @property
-    def lg_cc_nodes(self):
-        return self.__lg_cc_nodes
+    def j_lg_cc_nodes(self):
+        return self.__j_lg_cc_nodes
 
     @property
-    def lg_cc_edges(self):
-        return self.__lg_cc_edges
+    def j_lg_cc_edges(self):
+        return self.__j_lg_cc_edges
+
+    @property
+    def a_lg_cc_nodes(self):
+        return self.__a_lg_cc_nodes
+
+    @property
+    def a_lg_cc_edges(self):
+        return self.__a_lg_cc_edges
 
     @property
     def island_nodes(self):
@@ -264,8 +292,12 @@ class ProcessGraph(object):
         return self.__g
 
     @property
-    def lg_cc_subgraph(self):
-        return self.__lg_cc_subgraph
+    def a_lg_cc_subgraph(self):
+        return self.__a_lg_cc_subgraph
+
+    @property
+    def j_lg_cc_subgraph(self):
+        return self.__j_lg_cc_subgraph
 
     @property
     def islands_graph(self):
@@ -295,10 +327,16 @@ class ProcessGraph(object):
             os.makedirs(output_dir)
 
         try:
-            self.__lg_cc_nodes.to_csv(
-                os.path.join(output_dir +'/'+ self.ads_obj.q +"_lg_cc_nodes.csv"), encoding='utf-8', index=False)
-            self.__lg_cc_edges.to_csv(
-                os.path.join(output_dir +'/'+ self.ads_obj.q +"_lg_cc_edges.csv"), encoding='utf-8', index=False)
+            self.__a_lg_cc_nodes.to_csv(
+                os.path.join(output_dir +'/'+ self.ads_obj.q +"_a_lg_cc_nodes.csv"), encoding='utf-8', index=False)
+            self.__a_lg_cc_edges.to_csv(
+                os.path.join(output_dir +'/'+ self.ads_obj.q +"_a_lg_cc_edges.csv"), encoding='utf-8', index=False)
+
+            self.__j_lg_cc_nodes.to_csv(
+                os.path.join(output_dir +'/'+ self.ads_obj.q +"_j_lg_cc_nodes.csv"), encoding='utf-8', index=False)
+            self.__j_lg_cc_edges.to_csv(
+                os.path.join(output_dir +'/'+ self.ads_obj.q +"_j_lg_cc_edges.csv"), encoding='utf-8', index=False)
+
             self.__islands_nodes.to_csv(
                 os.path.join(output_dir +'/'+ self.ads_obj.q +"_islands_nodes.csv"), encoding='utf-8', index=False)
             self.__islands_edges.to_csv(
