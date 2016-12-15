@@ -34,10 +34,6 @@ $(document).ready(function(){
                         else
                             s.startForceAtlas2();
                     });
-
-
-                    // add graph event listeners here
-
                 }
             }
         });
@@ -46,7 +42,23 @@ $(document).ready(function(){
     });
 });
 
+// from the sigmajs documentation...
+// adds neighbors method to sigma factory class -> populates allNeighborsIndex
+sigma.classes.graph.addMethod('neighbors', function(nodeId) {
+   var k;
+   var neighbors = {};
+   var index = this.allNeighborsIndex[nodeId] || {};
+
+   for (k in index)
+     neighbors[k] = this.nodesIndex[k];
+
+   return neighbors;
+ });
+
+
+
 //generate graph with sigma
+// added onClick functionality for nearest neighbors
 function make_graph(graph_data){
 
     var s = new sigma({
@@ -63,6 +75,55 @@ function make_graph(graph_data){
               //edgeColor: 'default'
             }
         });
+
+    // binding events for neighbors
+    s.graph.nodes().forEach(function(n) {
+        n.originalColor = n.color;
+    });
+
+    s.graph.edges().forEach(function(e) {
+        e.originalColor = e.color;
+    });
+
+
+    s.bind('clickNode', function(e) {
+        var nodeId = e.data.node.id;
+        var toKeep = s.graph.neighbors(nodeId);
+
+        toKeep[nodeId] = e.data.node;
+
+        s.graph.nodes().forEach(function(n) {
+          if (toKeep[n.id])
+            n.color = n.originalColor;
+          else
+            n.color = '#eee';
+        });
+
+        s.graph.edges().forEach(function(e) {
+          if (toKeep[e.source] && toKeep[e.target])
+            e.color = e.originalColor;
+          else
+            e.color = '#eee';
+        });
+
+        // Since the data has been modified, we need to
+        // call the refresh method to make the colors
+        // update effective.
+        s.refresh();
+    });
+
+    s.bind('clickStage', function(e) {
+        s.graph.nodes().forEach(function(n) {
+          n.color = n.originalColor;
+        });
+
+        s.graph.edges().forEach(function(e) {
+          e.color = e.originalColor;
+        });
+
+        // Same as in the previous event:
+        s.refresh();
+    });
 
     //s.startForceAtlas2(config);
     return s;
