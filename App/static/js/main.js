@@ -1,32 +1,33 @@
 // main js page for sigma and ajax
-
-var forceAtlasConfig = {
-    linLogMode: false,
-    outboundAttractionDistribution: true,
-    startingIterations: 12, // maybe figure out how to scale these for size of graph
-    iterationsPerRender: 20,
-    gravity:2.25
-}
-
-// from the sigmajs documentation...
-// adds neighbors method to sigma factory class -> populates allNeighborsIndex
-sigma.classes.graph.addMethod('neighbors', function(nodeId) {
-    var k;
-    var neighbors = {};
-    var index = this.allNeighborsIndex[nodeId] || {};
-
-    for (k in index)
-        neighbors[k] = this.nodesIndex[k];
-
-    return neighbors;
-});
-
 // jquery page load and ajax request handler
 // contains the make_graph sigma function
 
 $(document).ready(function(){
 
-    $(".form-inline").on("submit", function(event){
+    var forceAtlasConfig = {
+        linLogMode: false,
+        outboundAttractionDistribution: true,
+        startingIterations: 12, // maybe figure out how to scale these for size of graph
+        iterationsPerRender: 20,
+        gravity:2.25
+    }
+
+    // from the sigmajs documentation...
+    // adds neighbors method to sigma factory class -> populates allNeighborsIndex
+    sigma.classes.graph.addMethod('neighbors', function(nodeId) {
+        var k;
+        var neighbors = {};
+        var index = this.allNeighborsIndex[nodeId] || {};
+
+        for (k in index)
+            neighbors[k] = this.nodesIndex[k];
+
+        return neighbors;
+    });
+
+
+    // main ajax request form
+    $("#requestForm").on("submit", function(event){
         event.preventDefault();
 
         $.ajax({
@@ -60,10 +61,17 @@ $(document).ready(function(){
                         if ($('#htmlTable > tbody').is(':empty'))
                             $('#htmlTableWrapper').css('visibility','hidden');
                     });
+
+                    $("#exportButton").on('click',function(event){
+                        $("#htmlTable").tableToCSV();
+                    });
+
                 } // can add an else error message here
             }
         });
     });
+
+    // make graph function
 
     function make_graph(graph_data){
 
@@ -89,7 +97,6 @@ $(document).ready(function(){
         s.graph.edges().forEach(function(e) {
             e.originalColor = e.color;
         });
-
 
         s.bind('clickNode', function(e) {
             var nodeId = e.data.node.id;
@@ -156,4 +163,5 @@ $(document).ready(function(){
 
         return s; // return the sigma instance to outer scope..
     }
+
 });

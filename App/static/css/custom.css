@@ -2,10 +2,6 @@
     display: none;
 }
 
-.rm-btn {
-    font-size: 20px;
-
-}
 
 .rm-btn {
     -webkit-border-radius: 8;
@@ -13,16 +9,26 @@
     border-radius: 8px;
     font-family: Arial;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 16px;
     background: #a7b8c4;
     padding: 0px 4px 0px 3px;
     text-decoration: none;
 }
 
+#downloadWrapper {
+    width: 52%;
+    margin-left: 48%;
+}
+
+#exportButton {
+    width:42%;
+    margin-left: 50%;
+}
+
 
 #graphContainer {
     position: absolute;
-    width: 90%;    /* need to leave some space for the remove buttons*/
+    width: 83%;    /* need to leave some space for the remove buttons*/
     height: 100%;
     margin: auto;
 }

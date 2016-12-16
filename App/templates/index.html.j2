@@ -13,8 +13,8 @@
     <!--  sigma + plugins -->
     <script src="static/js/sigma.min.js" type="text/javascript"></script>
     <script src="static/js/sigma.layout.forceAtlas2.min.js" type="text/javascript"></script>
-    <!-- <script src="static/js/sigma.plugins.animate.min.js" type="text/javascript"></script> -->
-    <!-- <script src="static/js/sigma.layout.noverlap.min.js" type="text/javascript"></script> -->
+    <!-- jquery CSV export plugin -->
+    <script src="static/js/jquery.tabletoCSV.js"type="text/javascript"></script>
 
 </head>
 <body>
@@ -25,7 +25,7 @@
         </p>
         <div class="container">
             <!-- Bootstrap 2- field form  -->
-            <form class="form-inline">
+            <form class="form-inline" id='requestForm'>
                 <select class="custom-select" id="gtypeSelect">
                     <option selected>Select a Graph Type </option>
                     <option value="islands">Island Subgraph (Author and Journal) </option>
@@ -70,7 +70,11 @@
                         </tr>
                     </thead>
                     <tbody></tbody>    <!-- jquery fills in rows for node table -->
+                </form>
                 </table>
+                <div class="form-group" id="downloadWrapper">
+                    <button id="exportButton" class='btn btn-primary' data-export="export">Export to CSV</button>
+                </div>
             </div>
         </div>
     </div>
