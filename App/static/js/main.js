@@ -66,9 +66,18 @@ $(document).ready(function(){
                         $("#htmlTable").tableToCSV();
                     });
 
+
+
                 } // can add an else error message here
             }
         });
+    });
+
+    $('#aboutButton').on('click', function(event){
+        if ($('#abstractWrapper').css('display') == 'none')
+            $('#abstractWrapper').show(100);
+        else
+            $('#abstractWrapper').hide(100);
     });
 
     // make graph function

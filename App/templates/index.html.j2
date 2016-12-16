@@ -19,10 +19,12 @@
 </head>
 <body>
     <header>
-        <h1> NASA ADS: Demo Version</h1>
-        <p>
-            Select graph type and subject and hit submit...
-        </p>
+        <h1> NASA ADS: Journal/Authorship Graph Vizualization Tool</h1>
+        <div class='container'>
+            <button type="button" class="btn btn-primary" id="aboutButton">About</button>
+        </div>
+        {%include 'abstract.html.j2'%}
+
         <div class="container">
             <!-- Bootstrap 2- field form  -->
             <form class="form-inline" id='requestForm'>

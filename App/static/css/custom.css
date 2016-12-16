@@ -15,6 +15,13 @@
     text-decoration: none;
 }
 
+#abstractWrapper {
+    margin-right: 50%;
+    width: 58%;
+    display: none;
+}
+
+
 #downloadWrapper {
     width: 52%;
     margin-left: 48%;
