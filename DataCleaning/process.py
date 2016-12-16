@@ -27,6 +27,9 @@ class ProcessADS(object):
         ads.config.token = self.key
         papers = list(ads.SearchQuery(q=self.q, sort="citation_count",max_pages=self.max_pages))
 
+        # immediately reformat q for naming the tables using lowercase _ convention
+        self.q = self.q.lower().replace(" ","_")
+
         # <------ code dump from daina's ipython script ---->
         author_names = [i.author for i in papers]   # This code bottlenecks based on topic.. 5 - 60 secs
         journals = [i.pub for i in papers]

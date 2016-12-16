@@ -106,9 +106,9 @@ $(document).ready(function(){
 
             s.graph.edges().forEach(function(e) {
               if (toKeep[e.source] && toKeep[e.target])
-                e.color = e.originalColor;
+                e.color = 'rgba(27, 115, 186, 0.90)';
               else
-                e.color = '#eee';
+                e.color = 'rgba(1, 1, 1, 0.1)';
             });
 
             // Since the data has been modified, we need to
