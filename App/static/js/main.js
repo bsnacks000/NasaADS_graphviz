@@ -68,7 +68,7 @@ $(document).ready(function(){
     function make_graph(graph_data){
 
         var s = new sigma({
-                graph: graph_data,
+                graph: graph_data.graph,
                 container: 'graphContainer',
                 renderers: [{
                     container: document.getElementById('graphContainer'),
@@ -133,7 +133,7 @@ $(document).ready(function(){
         // binding for html table
         s.bind('doubleClickNode', function(e){
             var data = {
-                //id: "<td>"+e.data.node.id+<"/td">,
+                subject: "<td>"+graph_data.subject+"</td>",
                 label: "<td>"+ e.data.node.label + "</td>",
                 ntype: "<td>"+e.data.node.node_type + "</td>",
                 betw: "<td>"+e.data.node.zbetween_central+ "</td>",
@@ -149,7 +149,8 @@ $(document).ready(function(){
 
             // append the node row
             $('#htmlTable > tbody').append(
-                "<tr>"+data.label+data.ntype+data.betw+data.deg+data.pager+removeButton+"</tr>"
+                "<tr>"+data.label+data.subject+data.ntype+
+                data.betw+data.deg+data.pager+removeButton+"</tr>"
             );
         });
 

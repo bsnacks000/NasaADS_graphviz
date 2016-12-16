@@ -31,7 +31,7 @@ def make_graph():
             session[graph_name] = graph.sigma_obj
         # <---make tables sigma ready and return json--->
 
-        return jsonify(session[graph_name])
+        return jsonify({'subject':graph_name,'graph': session[graph_name]})
 
     except ValueError as e:
         return jsonify({'error': 'Value Error on server'})
