@@ -2,6 +2,7 @@
 from orm.starsORM import *
 from orm.cosmologyORM import *
 from orm.exoplanetORM import *
+from orm.highenergyORM import *
 # <---- add new imports here before updating
 
 def update_schema(db_path=None):
