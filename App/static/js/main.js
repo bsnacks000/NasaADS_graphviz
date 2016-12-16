@@ -5,7 +5,7 @@ var forceAtlasConfig = {
     outboundAttractionDistribution: true,
     startingIterations: 12, // maybe figure out how to scale these for size of graph
     iterationsPerRender: 20,
-    gravity:1.5
+    gravity:2.25
 }
 
 // from the sigmajs documentation...

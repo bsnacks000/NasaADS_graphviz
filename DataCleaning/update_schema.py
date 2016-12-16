@@ -1,6 +1,7 @@
 # when new subject is added import the <subject>ORM module
 from orm.starsORM import *
 from orm.cosmologyORM import *
+from orm.exoplanetORM import *
 # <---- add new imports here before updating
 
 def update_schema(db_path=None):
