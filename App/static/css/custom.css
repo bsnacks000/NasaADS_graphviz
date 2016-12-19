@@ -1,7 +1,4 @@
-.alert {
-    display: none;
-}
-
+/* Custom CSS mostly for the sigma canvas position, header fields and html table*/
 
 .rm-btn {
     -webkit-border-radius: 8;
@@ -50,6 +47,3 @@
     background-color: transparent;
     visibility: hidden;
 }
-
-
-/* Custom css here... */

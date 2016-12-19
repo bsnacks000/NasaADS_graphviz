@@ -12,7 +12,7 @@ $(document).ready(function(){
         gravity:2.25
     }
 
-    // from the sigmajs documentation...
+    // code from the sigmajs API documentation...
     // adds neighbors method to sigma factory class -> populates allNeighborsIndex
     sigma.classes.graph.addMethod('neighbors', function(nodeId) {
         var k;
@@ -62,11 +62,10 @@ $(document).ready(function(){
                             $('#htmlTableWrapper').css('visibility','hidden');
                     });
 
+                    // exports to local Downloads folder using the jquery plugin
                     $("#exportButton").on('click',function(event){
                         $("#htmlTable").tableToCSV();
                     });
-
-
 
                 } // can add an else error message here
             }
@@ -98,8 +97,11 @@ $(document).ready(function(){
                 }
             });
 
+
+        // code from the sigmajs API documentation
         // binding events for neighbors - save original color
-        s.graph.nodes().forEach(function(n) {
+        // Calling refresh() on each callback alters the graph
+        s.graph.nodes().forEach(function(n) {   // archive original colors
             n.originalColor = n.color;
         });
 
@@ -109,31 +111,28 @@ $(document).ready(function(){
 
         s.bind('clickNode', function(e) {
             var nodeId = e.data.node.id;
-            var toKeep = s.graph.neighbors(nodeId);
+            var toKeep = s.graph.neighbors(nodeId); // get Neighbor indexes on clicked nodes
 
             toKeep[nodeId] = e.data.node;
 
-            s.graph.nodes().forEach(function(n) {
+            s.graph.nodes().forEach(function(n) {   // alter node colors for not clicked
               if (toKeep[n.id])
                 n.color = n.originalColor;
               else
                 n.color = '#eee';
             });
 
-            s.graph.edges().forEach(function(e) {
+            s.graph.edges().forEach(function(e) {   // alter edge colors; transparent for not clicked, blue for clicked
               if (toKeep[e.source] && toKeep[e.target])
                 e.color = 'rgba(27, 115, 186, 0.90)';
               else
                 e.color = 'rgba(1, 1, 1, 0.1)';
             });
 
-            // Since the data has been modified, we need to
-            // call the refresh method to make the colors
-            // update effective.
             s.refresh();
         });
 
-        s.bind('clickStage', function(e) {
+        s.bind('clickStage', function(e) {         // on single click away convert back
             s.graph.nodes().forEach(function(n) {
               n.color = n.originalColor;
             });
@@ -142,14 +141,14 @@ $(document).ready(function(){
               e.color = e.originalColor;
             });
 
-            // Same as in the previous event:
+
             s.refresh();
         });
 
         // binding for html table
         s.bind('doubleClickNode', function(e){
             var data = {
-                subject: "<td>"+graph_data.subject+"</td>",
+                subject: "<td>"+graph_data.subject+"</td>",  // pulls subject from original graph_data object in outer scope
                 label: "<td>"+ e.data.node.label + "</td>",
                 ntype: "<td>"+e.data.node.node_type + "</td>",
                 betw: "<td>"+e.data.node.zbetween_central+ "</td>",
